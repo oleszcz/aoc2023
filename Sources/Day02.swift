@@ -18,8 +18,38 @@ struct Day02: AdventDay {
       var red = 0
       var green = 0
       var blue = 0
-      
-      return true
+      draws
+        .flatMap { $0 }
+        .forEach { cubes in
+          switch cubes.color {
+          case .red:
+            red = max(red, cubes.count)
+          case .green:
+            green = max(green, cubes.count)
+          case .blue:
+            blue = max(blue, cubes.count)
+          }
+        }
+      return red <= 12 && green <= 13 && blue <= 14
+    }
+    
+    var power: Int {
+      var red = 0
+      var green = 0
+      var blue = 0
+      draws
+        .flatMap { $0 }
+        .forEach { cubes in
+          switch cubes.color {
+          case .red:
+            red = max(red, cubes.count)
+          case .green:
+            green = max(green, cubes.count)
+          case .blue:
+            blue = max(blue, cubes.count)
+          }
+        }
+      return red * green * blue
     }
   }
   
@@ -33,13 +63,23 @@ struct Day02: AdventDay {
   
   // Replace this with your solution for the first part of the day's challenge.
   func part1() -> Any {
-    return GameParser.game(from: entities.first!)
+    entities
+      .map(GameParser.game(from:))
+      .reduce(into: 0) { partialResult, game in
+        if game.isPossible {
+          return partialResult += game.id
+        }
+      }
   }
   
   // Replace this with your solution for the second part of the day's challenge.
   func part2() -> Any {
-    return "day 2 part 2"
-    }
+    entities
+      .map(GameParser.game(from:))
+      .reduce(into: 0) { partialResult, game in
+        partialResult += game.power
+      }
+  }
 }
 
 extension Day02 {

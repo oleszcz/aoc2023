@@ -18,8 +18,12 @@ struct Day03: AdventDay {
   var data: String
   
   var entities: [[Character]]
-
+  
   let symbols: [Character]
+  
+  var dataWidth: Int {
+    entities.first!.count
+  }
   
   // Replace this with your solution for the first part of the day's challenge.
   func part1() -> Any {
@@ -55,11 +59,15 @@ struct Day03: AdventDay {
   func part2() -> Any {
     var result = 0
     for i in entities.indices {
-      var cluster: Cluster?
       for j in entities[i].indices {
         let currentCharacter = entities[i][j]
         if currentCharacter == "*" {
-          
+          let digitLocations = adjacentDigits(i: i, j: j)
+          if digitLocations.count == 2 {
+            let firstNumber = number(in: digitLocations.first!)
+            let secondNumber = number(in: digitLocations.last!)
+            result += (firstNumber * secondNumber)
+          }
         }
       }
     }
@@ -99,6 +107,46 @@ struct Day03: AdventDay {
     let extentedRange = (jRange.lowerBound - 1)...(jRange.upperBound + 1)
     return extentedRange.clamped(to: ClosedRange(entities.first!.indices))
   }
+  
+  func adjacentDigits(i: Int, j: Int) -> [Location] {
+    var digitLocations = [Location]()
+    let jRange = extended(jRange: j...j)
+    let iRange = ((i - 1)...(i + 1)).clamped(to: ClosedRange(entities.indices))
+    for i in iRange {
+      var isPartOfNumber = false
+      for j in jRange {
+        if entities[i][j].isWholeNumber {
+          if !isPartOfNumber {
+            digitLocations.append(.init(i: i, j: j))
+          }
+          isPartOfNumber = true
+        } else {
+          isPartOfNumber = false
+        }
+      }
+    }
+    return digitLocations
+  }
+  
+  func number(in location: Location) -> Int {
+    let j = location.j
+    var value = String(entities[location.i][j])
+    var toTheLeft = j - 1
+    while toTheLeft >= 0 {
+      let currentCharacter = entities[location.i][toTheLeft]
+      guard currentCharacter.isWholeNumber else { break }
+      value.insert(currentCharacter, at: .init(utf16Offset: 0, in: value))
+      toTheLeft -= 1
+    }
+    var toTheRight = j + 1
+    while toTheRight < dataWidth {
+      let currentCharacter = entities[location.i][toTheRight]
+      guard currentCharacter.isWholeNumber else { break }
+      value.append(currentCharacter)
+      toTheRight += 1
+    }
+    return Int(value) ?? -7
+  }
 }
 
 extension Day03 {
@@ -129,7 +177,8 @@ extension Day03 {
     }
   }
   
-  struct GearCluster {
-    
+  struct Location {
+    let i: Int
+    let j: Int
   }
 }

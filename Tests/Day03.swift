@@ -23,6 +23,65 @@ final class Day03Tests: XCTestCase {
     let challenge = Day03(data: testData)
     XCTAssertEqual(String(describing: challenge.part1()), "4361")
   }
+  
+  func testPart1_trailingSymbol() throws {
+    let aTestData = """
+      467..114..
+      ...*......
+      ..35..633.
+      .........%
+      617*......
+      .....+.58.
+      ..592.....
+      ......755.
+      ...$.*....
+      .664.598..
+      """
+    let challenge = Day03(data: aTestData)
+    XCTAssertEqual(String(describing: challenge.part1()), "4361")
+  }
+  
+  func testPart1_leadingSymbol() throws {
+    let aTestData = """
+      467..114..
+      ...*......
+      ..35..633.
+      .........%
+      617*......
+      .....+.58.
+      ..592.....
+      ......755.
+      /....*....
+      .664.598..
+      """
+    let challenge = Day03(data: aTestData)
+    XCTAssertEqual(String(describing: challenge.part1()), "4361")
+  }
+  
+  func testPart1_commonSymbol() throws {
+    let aTestData = """
+      467..114..
+      ...*......
+      ..35..633.
+      .........%
+      617*......
+      .....+.58.
+      ..592.....
+      ......755#
+      ....*.....
+      .664.598..
+      """
+    let challenge = Day03(data: aTestData)
+    XCTAssertEqual(String(describing: challenge.part1()), "4361")
+  }
+  
+  func testPart1_symbolInTheMiddle() throws {
+    let aTestData = """
+      .111*222..
+      """
+    let challenge = Day03(data: aTestData)
+    XCTAssertEqual(String(describing: challenge.part1()), "333")
+  }
 
   func testPart2() throws {
     let challenge = Day03(data: testData)

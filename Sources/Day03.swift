@@ -35,14 +35,14 @@ struct Day03: AdventDay {
             cluster?.append(j: j, value: currentCharacter)
           }
         } else if let aCluster = cluster {
-          if aCluster.validate(using: neighbors(for: aCluster)) {
+          if !filteredNeighbors(for: aCluster).isEmpty {
             result += aCluster.intValue
           }
           cluster = nil
         }
       }
       if let aCluster = cluster {
-        if aCluster.validate(using: neighbors(for: aCluster)) {
+        if !filteredNeighbors(for: aCluster).isEmpty {
           result += aCluster.intValue
         }
         cluster = nil
@@ -53,7 +53,17 @@ struct Day03: AdventDay {
   
   // Replace this with your solution for the second part of the day's challenge.
   func part2() -> Any {
-    "day 3 part 2"
+    var result = 0
+    for i in entities.indices {
+      var cluster: Cluster?
+      for j in entities[i].indices {
+        let currentCharacter = entities[i][j]
+        if currentCharacter == "*" {
+          
+        }
+      }
+    }
+    return result
   }
   
   func neighbors(for cluster: Cluster) -> [Character] {
@@ -63,7 +73,7 @@ struct Day03: AdventDay {
       neighbors.append(contentsOf: entities[i][extended(jRange: cluster.jRange)])
     }
     if cluster.jRange.lowerBound > 0 {
-      let j = cluster.jRange.lowerBound + 1
+      let j = cluster.jRange.lowerBound - 1
       neighbors.append(entities[cluster.i][j])
     }
     if cluster.jRange.upperBound < 0 {
@@ -117,5 +127,9 @@ extension Day03 {
       let filteredNeighbors = neighbors.filter { $0 != "." && ($0.isPunctuation || $0.isSymbol || $0.isMathSymbol) }
       return !filteredNeighbors.isEmpty
     }
+  }
+  
+  struct GearCluster {
+    
   }
 }
